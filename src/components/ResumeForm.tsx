@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -54,78 +54,77 @@ export default function ResumeForm({ updatePreview }) {
     certifications: [""],
   });
 
-  const handleChange = (section, field, value, index = null) => {
-    if (index !== null) {
-      const newData = { ...formData };
-      newData[section][index][field] = value;
-      setFormData(newData);
-    } else if (section === "skills" || section === "certifications") {
-      const newData = { ...formData };
-      newData[section][index] = value;
-      setFormData(newData);
-    } else {
-      setFormData({
-        ...formData,
-        [section]: {
-          ...formData[section],
-          [field]: value,
-        },
-      });
-    }
+  // Send initial data to preview on component mount
+  useEffect(() => {
     updatePreview(formData);
+  }, []);
+
+  const handleChange = (section, field, value, index = null) => {
+    const newData = { ...formData };
+    
+    if (index !== null) {
+      newData[section][index][field] = value;
+    } else if (section === "skills" || section === "certifications") {
+      newData[section][index] = value;
+    } else {
+      newData[section] = {
+        ...newData[section],
+        [field]: value,
+      };
+    }
+    
+    setFormData(newData);
+    // Update preview with the new data
+    updatePreview(newData);
   };
 
   const handleArrayChange = (section, index, value) => {
     const newData = { ...formData };
     newData[section][index] = value;
     setFormData(newData);
-    updatePreview(formData);
+    updatePreview(newData);
   };
 
   const addItem = (section) => {
+    const newData = { ...formData };
+    
     if (section === "experience") {
-      setFormData({
-        ...formData,
-        experience: [
-          ...formData.experience,
-          {
-            company: "",
-            position: "",
-            startDate: "",
-            endDate: "",
-            current: false,
-            description: "",
-          },
-        ],
-      });
+      newData.experience = [
+        ...newData.experience,
+        {
+          company: "",
+          position: "",
+          startDate: "",
+          endDate: "",
+          current: false,
+          description: "",
+        },
+      ];
     } else if (section === "education") {
-      setFormData({
-        ...formData,
-        education: [
-          ...formData.education,
-          {
-            institution: "",
-            degree: "",
-            field: "",
-            startDate: "",
-            endDate: "",
-            description: "",
-          },
-        ],
-      });
+      newData.education = [
+        ...newData.education,
+        {
+          institution: "",
+          degree: "",
+          field: "",
+          startDate: "",
+          endDate: "",
+          description: "",
+        },
+      ];
     } else if (section === "skills" || section === "certifications") {
-      setFormData({
-        ...formData,
-        [section]: [...formData[section], ""],
-      });
+      newData[section] = [...newData[section], ""];
     }
+    
+    setFormData(newData);
+    updatePreview(newData);
   };
 
   const removeItem = (section, index) => {
     const newData = { ...formData };
     newData[section].splice(index, 1);
     setFormData(newData);
-    updatePreview(formData);
+    updatePreview(newData);
   };
 
   const saveResume = () => {

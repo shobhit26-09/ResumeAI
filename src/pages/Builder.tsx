@@ -1,18 +1,50 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ResumeForm from "@/components/ResumeForm";
 import ResumePreview from "@/components/ResumePreview";
 import { Button } from "@/components/ui/button";
-import { Download, Save } from "lucide-react";
+import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Builder() {
   const { toast } = useToast();
-  const [resumeData, setResumeData] = useState({});
+  const [resumeData, setResumeData] = useState({
+    personalInfo: {
+      name: "",
+      title: "",
+      email: "",
+      phone: "",
+      website: "",
+      summary: "",
+    },
+    experience: [
+      {
+        company: "",
+        position: "",
+        startDate: "",
+        endDate: "",
+        current: false,
+        description: "",
+      },
+    ],
+    education: [
+      {
+        institution: "",
+        degree: "",
+        field: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+      },
+    ],
+    skills: [""],
+    certifications: [""],
+  });
 
   const updatePreview = (data) => {
+    console.log("Preview data updated:", data);
     setResumeData(data);
   };
 
