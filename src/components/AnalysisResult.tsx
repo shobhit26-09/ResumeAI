@@ -17,7 +17,47 @@ import { Progress } from "@/components/ui/progress";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
-export default function AnalysisResult({ results }) {
+// Define types for the result data
+interface Section {
+  score: number;
+}
+
+interface Sections {
+  [key: string]: Section;
+}
+
+interface Insight {
+  type: "positive" | "warning" | "negative";
+  text: string;
+}
+
+interface Recommendation {
+  category: "content" | "keywords" | "formatting" | "other";
+  title: string;
+  description: string;
+  examples?: string;
+}
+
+interface ATSScores {
+  readability: number;
+  keywords: number;
+  formatting: number;
+}
+
+interface AnalysisResultData {
+  overallScore: number;
+  sections: Sections;
+  keyInsights: Insight[];
+  recommendations: Recommendation[];
+  atsScores: ATSScores;
+  detectedKeywords: string[];
+}
+
+interface AnalysisResultProps {
+  results: AnalysisResultData | null;
+}
+
+export default function AnalysisResult({ results }: AnalysisResultProps) {
   const [isOpen, setIsOpen] = useState(false);
   
   if (!results) {
@@ -30,13 +70,13 @@ export default function AnalysisResult({ results }) {
     );
   }
 
-  const scoreColor = (score) => {
+  const scoreColor = (score: number) => {
     if (score >= 80) return "text-green-500";
     if (score >= 60) return "text-yellow-500";
     return "text-red-500";
   };
 
-  const progressColor = (score) => {
+  const progressColor = (score: number) => {
     if (score >= 80) return "bg-green-500";
     if (score >= 60) return "bg-yellow-500";
     return "bg-red-500";
