@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ResumeForm from "@/components/ResumeForm";
@@ -7,9 +7,12 @@ import ResumePreview from "@/components/ResumePreview";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function Builder() {
   const { toast } = useToast();
+  const resumeRef = useRef(null);
   const [resumeData, setResumeData] = useState({
     personalInfo: {
       name: "",
@@ -40,7 +43,10 @@ export default function Builder() {
       },
     ],
     skills: [""],
-    certifications: [""],
+    certifications: [{
+      name: "",
+      url: ""
+    }],
   });
 
   const updatePreview = (data) => {
@@ -48,11 +54,57 @@ export default function Builder() {
     setResumeData(data);
   };
 
-  const handleDownload = () => {
-    toast({
-      title: "Resume downloaded",
-      description: "Your resume has been downloaded as a PDF",
-    });
+  const handleDownload = async () => {
+    if (!resumeRef.current) {
+      toast({
+        title: "Error",
+        description: "Could not generate PDF. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      toast({
+        title: "Generating PDF",
+        description: "Please wait while we generate your resume...",
+      });
+
+      const element = resumeRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        logging: false,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+      });
+      
+      const imgData = canvas.toDataURL('image/png');
+      
+      // Calculate dimensions for PDF (A4 format)
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+      });
+      
+      const imgWidth = 210; // A4 width in mm
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(`${resumeData.personalInfo.name || 'resume'}.pdf`);
+      
+      toast({
+        title: "Resume downloaded",
+        description: "Your resume has been downloaded as a PDF",
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem generating your PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -75,7 +127,7 @@ export default function Builder() {
                   </Button>
                 </div>
               </div>
-              <div className="border rounded-lg overflow-hidden shadow-sm">
+              <div className="border rounded-lg overflow-hidden shadow-sm" ref={resumeRef}>
                 <ResumePreview data={resumeData} />
               </div>
             </div>

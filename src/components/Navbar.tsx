@@ -1,12 +1,13 @@
 
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "./ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const [isSignedIn, setIsSignedIn] = useState(false); // Mock signed in state
+  const { isSignedIn } = useUser();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -64,17 +65,19 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           {isSignedIn ? (
-            <Button variant="outline" size="sm" onClick={() => setIsSignedIn(false)}>
-              Sign Out
-            </Button>
+            <UserButton afterSignOutUrl="/" />
           ) : (
             <>
-              <Button variant="ghost" size="sm" onClick={() => setIsSignedIn(true)}>
-                Sign In
-              </Button>
-              <Button variant="default" size="sm" onClick={() => setIsSignedIn(true)}>
-                Sign Up
-              </Button>
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm">
+                  Sign In
+                </Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button variant="default" size="sm">
+                  Sign Up
+                </Button>
+              </SignUpButton>
             </>
           )}
         </div>
@@ -114,17 +117,22 @@ export default function Navbar() {
             
             <div className="flex flex-col gap-3 mt-4">
               {isSignedIn ? (
-                <Button variant="outline" className="w-full" onClick={() => setIsSignedIn(false)}>
-                  Sign Out
-                </Button>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">Manage account</span>
+                  <UserButton afterSignOutUrl="/" />
+                </div>
               ) : (
                 <>
-                  <Button variant="outline" className="w-full" onClick={() => setIsSignedIn(true)}>
-                    Sign In
-                  </Button>
-                  <Button variant="default" className="w-full" onClick={() => setIsSignedIn(true)}>
-                    Sign Up
-                  </Button>
+                  <SignInButton mode="modal">
+                    <Button variant="outline" className="w-full">
+                      Sign In
+                    </Button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <Button variant="default" className="w-full">
+                      Sign Up
+                    </Button>
+                  </SignUpButton>
                 </>
               )}
             </div>

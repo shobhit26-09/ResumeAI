@@ -1,5 +1,5 @@
 
-import { Mail, Phone, Globe, Calendar } from "lucide-react";
+import { Mail, Phone, Globe, Calendar, ExternalLink } from "lucide-react";
 
 export default function ResumePreview({ data }) {
   const hasData = data && Object.keys(data).length > 0;
@@ -18,6 +18,16 @@ export default function ResumePreview({ data }) {
       </div>
     );
   }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short'
+    });
+  };
 
   return (
     <div className="w-full min-h-full p-8 border rounded-lg bg-white text-black">
@@ -72,23 +82,14 @@ export default function ResumePreview({ data }) {
                   <div className="text-xs text-gray-600 flex items-center">
                     <Calendar className="h-3 w-3 mr-1" />
                     {exp.startDate && (
-                      <span>
-                        {new Date(exp.startDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
-                      </span>
+                      <span>{formatDate(exp.startDate)}</span>
                     )}
-                    {exp.startDate && exp.endDate && <span> - </span>}
-                    {exp.endDate && (
-                      <span>
-                        {new Date(exp.endDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
-                      </span>
-                    )}
-                    {exp.current && <span>Present</span>}
+                    {exp.startDate && (exp.endDate || exp.current) && <span> - </span>}
+                    {exp.current ? (
+                      <span>Present</span>
+                    ) : exp.endDate ? (
+                      <span>{formatDate(exp.endDate)}</span>
+                    ) : null}
                   </div>
                 )}
               </div>
@@ -114,21 +115,11 @@ export default function ResumePreview({ data }) {
                   <div className="text-xs text-gray-600 flex items-center">
                     <Calendar className="h-3 w-3 mr-1" />
                     {edu.startDate && (
-                      <span>
-                        {new Date(edu.startDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
-                      </span>
+                      <span>{formatDate(edu.startDate)}</span>
                     )}
                     {edu.startDate && edu.endDate && <span> - </span>}
                     {edu.endDate && (
-                      <span>
-                        {new Date(edu.endDate).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short'
-                        })}
-                      </span>
+                      <span>{formatDate(edu.endDate)}</span>
                     )}
                   </div>
                 )}
@@ -154,12 +145,28 @@ export default function ResumePreview({ data }) {
       )}
 
       {/* Certifications */}
-      {data.certifications && data.certifications.filter(c => c).length > 0 && (
+      {data.certifications && data.certifications.filter(c => c.name || c.url).length > 0 && (
         <div>
           <h3 className="text-md font-bold border-b pb-1 mb-2">Certifications & Awards</h3>
           <ul className="list-disc list-inside text-sm">
-            {data.certifications.filter(c => c).map((cert, index) => (
-              <li key={index}>{cert}</li>
+            {data.certifications.filter(c => c.name || c.url).map((cert, index) => (
+              <li key={index} className="flex items-center gap-1 mb-1">
+                {cert.url ? (
+                  <>
+                    <a 
+                      href={cert.url} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline flex items-center"
+                    >
+                      {cert.name || cert.url}
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </a>
+                  </>
+                ) : (
+                  cert.name
+                )}
+              </li>
             ))}
           </ul>
         </div>

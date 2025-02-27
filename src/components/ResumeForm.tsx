@@ -15,8 +15,11 @@ import {
   Link as LinkIcon,
   Plus,
   Trash2,
+  ExternalLink
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export default function ResumeForm({ updatePreview }) {
   const { toast } = useToast();
@@ -51,7 +54,10 @@ export default function ResumeForm({ updatePreview }) {
       },
     ],
     skills: [""],
-    certifications: [""],
+    certifications: [{
+      name: "",
+      url: ""
+    }],
   });
 
   // Send initial data to preview on component mount
@@ -64,8 +70,10 @@ export default function ResumeForm({ updatePreview }) {
     
     if (index !== null) {
       newData[section][index][field] = value;
-    } else if (section === "skills" || section === "certifications") {
+    } else if (section === "skills") {
       newData[section][index] = value;
+    } else if (section === "certifications") {
+      newData[section][index][field] = value;
     } else {
       newData[section] = {
         ...newData[section],
@@ -81,6 +89,13 @@ export default function ResumeForm({ updatePreview }) {
   const handleArrayChange = (section, index, value) => {
     const newData = { ...formData };
     newData[section][index] = value;
+    setFormData(newData);
+    updatePreview(newData);
+  };
+
+  const handleCertificationChange = (index, field, value) => {
+    const newData = { ...formData };
+    newData.certifications[index][field] = value;
     setFormData(newData);
     updatePreview(newData);
   };
@@ -112,8 +127,13 @@ export default function ResumeForm({ updatePreview }) {
           description: "",
         },
       ];
-    } else if (section === "skills" || section === "certifications") {
+    } else if (section === "skills") {
       newData[section] = [...newData[section], ""];
+    } else if (section === "certifications") {
+      newData.certifications = [...newData.certifications, {
+        name: "",
+        url: ""
+      }];
     }
     
     setFormData(newData);
@@ -123,6 +143,16 @@ export default function ResumeForm({ updatePreview }) {
   const removeItem = (section, index) => {
     const newData = { ...formData };
     newData[section].splice(index, 1);
+    setFormData(newData);
+    updatePreview(newData);
+  };
+
+  const handleCurrentJobToggle = (index, checked) => {
+    const newData = { ...formData };
+    newData.experience[index].current = checked;
+    if (checked) {
+      newData.experience[index].endDate = "";
+    }
     setFormData(newData);
     updatePreview(newData);
   };
@@ -277,7 +307,7 @@ export default function ResumeForm({ updatePreview }) {
                 <div>
                   <label className="text-sm font-medium mb-1 block">Start Date</label>
                   <Input
-                    type="month"
+                    type="date"
                     value={exp.startDate}
                     onChange={(e) =>
                       handleChange("experience", "startDate", e.target.value, index)
@@ -287,13 +317,23 @@ export default function ResumeForm({ updatePreview }) {
                 <div>
                   <label className="text-sm font-medium mb-1 block">End Date</label>
                   <Input
-                    type="month"
+                    type="date"
                     value={exp.endDate}
                     onChange={(e) =>
                       handleChange("experience", "endDate", e.target.value, index)
                     }
                     disabled={exp.current}
                   />
+                  <div className="flex items-center space-x-2 mt-2">
+                    <Checkbox 
+                      id={`current-job-${index}`}
+                      checked={exp.current}
+                      onCheckedChange={(checked) => 
+                        handleCurrentJobToggle(index, checked === true)
+                      }
+                    />
+                    <Label htmlFor={`current-job-${index}`}>Current position</Label>
+                  </div>
                 </div>
               </div>
 
@@ -376,7 +416,7 @@ export default function ResumeForm({ updatePreview }) {
                 <div>
                   <label className="text-sm font-medium mb-1 block">Start Date</label>
                   <Input
-                    type="month"
+                    type="date"
                     value={edu.startDate}
                     onChange={(e) =>
                       handleChange("education", "startDate", e.target.value, index)
@@ -386,7 +426,7 @@ export default function ResumeForm({ updatePreview }) {
                 <div>
                   <label className="text-sm font-medium mb-1 block">End Date</label>
                   <Input
-                    type="month"
+                    type="date"
                     value={edu.endDate}
                     onChange={(e) =>
                       handleChange("education", "endDate", e.target.value, index)
@@ -455,23 +495,34 @@ export default function ResumeForm({ updatePreview }) {
             <h3 className="font-medium">Certifications & Awards</h3>
             <div className="space-y-3">
               {formData.certifications.map((cert, index) => (
-                <div key={index} className="flex gap-2">
-                  <Input
-                    placeholder="e.g. AWS Certified Developer, etc."
-                    value={cert}
-                    onChange={(e) =>
-                      handleArrayChange("certifications", index, e.target.value)
-                    }
-                  />
-                  {formData.certifications.length > 1 && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => removeItem("certifications", index)}
-                    >
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
-                  )}
+                <div key={index} className="space-y-3">
+                  <div className="flex gap-2">
+                    <Input
+                      placeholder="e.g. AWS Certified Developer"
+                      value={cert.name}
+                      onChange={(e) => handleCertificationChange(index, "name", e.target.value)}
+                    />
+                    {formData.certifications.length > 1 && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeItem("certifications", index)}
+                      >
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    )}
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <div className="flex-1 relative">
+                      <ExternalLink className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        className="pl-10"
+                        placeholder="https://certification-url.com"
+                        value={cert.url}
+                        onChange={(e) => handleCertificationChange(index, "url", e.target.value)}
+                      />
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
