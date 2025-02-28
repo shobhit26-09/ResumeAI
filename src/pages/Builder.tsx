@@ -1,5 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
+import { useAuth } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ResumeForm from "@/components/ResumeForm";
@@ -11,6 +13,8 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 export default function Builder() {
+  const { userId, isLoaded } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const resumeRef = useRef(null);
   const [resumeData, setResumeData] = useState({
@@ -48,6 +52,27 @@ export default function Builder() {
       url: ""
     }],
   });
+
+  // Redirect to sign-in if not authenticated
+  useEffect(() => {
+    if (isLoaded && !userId) {
+      navigate("/sign-in");
+    }
+  }, [isLoaded, userId, navigate]);
+
+  // If still loading auth state, show loading
+  if (!isLoaded) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  // If no user ID after loading, don't render the page
+  if (!userId) {
+    return null;
+  }
 
   const updatePreview = (data) => {
     console.log("Preview data updated:", data);

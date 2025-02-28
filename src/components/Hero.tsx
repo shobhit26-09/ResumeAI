@@ -1,18 +1,22 @@
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/clerk-react";
+import { useAuth } from "@clerk/clerk-react";
 
 export default function Hero() {
-  const { isSignedIn } = useUser();
+  const { userId } = useAuth();
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (isSignedIn) {
+    if (userId) {
       navigate("/builder");
     } else {
       navigate("/sign-up");
     }
+  };
+
+  const handleAnalyzeResume = () => {
+    navigate("/analyzer");
   };
 
   return (
@@ -32,13 +36,16 @@ export default function Hero() {
                 className="w-full sm:w-auto"
                 onClick={handleGetStarted}
               >
-                {isSignedIn ? "Create Resume" : "Get Started"}
+                {userId ? "Create Resume" : "Get Started"}
               </Button>
-              <Link to="/analyzer">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                  Analyze Resume
-                </Button>
-              </Link>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="w-full sm:w-auto"
+                onClick={handleAnalyzeResume}
+              >
+                Analyze Resume
+              </Button>
             </div>
           </div>
           
@@ -46,7 +53,7 @@ export default function Hero() {
             <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl blur-xl opacity-30 animate-pulse"></div>
             <div className="relative bg-card border rounded-xl overflow-hidden shadow-xl">
               <img 
-                src="https://images.unsplash.com/photo-1506744038136-46273834b3fb" 
+                src="https://images.unsplash.com/photo-1644982647711-9129d2ed7ceb?q=80&w=1000" 
                 alt="Resume builder preview" 
                 className="w-full h-auto object-cover rounded-xl opacity-90"
               />

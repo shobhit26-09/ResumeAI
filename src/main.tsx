@@ -8,7 +8,7 @@ import './index.css';
 const CLERK_PUBLISHABLE_KEY = "pk_test_Y29tcGxldGUtbWFpbmUtMjYuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
 if (!CLERK_PUBLISHABLE_KEY) {
-  console.error("Missing Clerk Publishable Key");
+  throw new Error("Missing Clerk Publishable Key");
 }
 
 createRoot(document.getElementById("root")!).render(

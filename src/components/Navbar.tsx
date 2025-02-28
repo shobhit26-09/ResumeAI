@@ -1,13 +1,13 @@
 
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
+import { UserButton, useAuth } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "./ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const { isSignedIn } = useUser();
+  const { userId } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -35,6 +35,14 @@ export default function Navbar() {
   useEffect(() => {
     setIsOpen(false);
   }, [location]);
+
+  const handleSignIn = () => {
+    navigate("/sign-in");
+  };
+
+  const handleSignUp = () => {
+    navigate("/sign-up");
+  };
 
   return (
     <header
@@ -65,21 +73,21 @@ export default function Navbar() {
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          {isSignedIn ? (
+          {userId ? (
             <UserButton afterSignOutUrl="/" />
           ) : (
             <>
               <Button 
                 variant="ghost" 
-                size="sm" 
-                onClick={() => navigate("/sign-in")}
+                size="sm"
+                onClick={handleSignIn}
               >
                 Sign In
               </Button>
               <Button 
                 variant="default" 
-                size="sm" 
-                onClick={() => navigate("/sign-up")}
+                size="sm"
+                onClick={handleSignUp}
               >
                 Sign Up
               </Button>
@@ -121,7 +129,7 @@ export default function Navbar() {
             </nav>
             
             <div className="flex flex-col gap-3 mt-4">
-              {isSignedIn ? (
+              {userId ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Manage account</span>
                   <UserButton afterSignOutUrl="/" />
@@ -131,14 +139,14 @@ export default function Navbar() {
                   <Button 
                     variant="outline" 
                     className="w-full"
-                    onClick={() => navigate("/sign-in")}
+                    onClick={handleSignIn}
                   >
                     Sign In
                   </Button>
                   <Button 
                     variant="default" 
                     className="w-full"
-                    onClick={() => navigate("/sign-up")}
+                    onClick={handleSignUp}
                   >
                     Sign Up
                   </Button>
