@@ -5,7 +5,6 @@ import App from './App.tsx';
 import './index.css';
 
 // Your Clerk publishable key
-// This should be the publishable key, not the secret key
 const CLERK_PUBLISHABLE_KEY = "pk_test_Y29tcGxldGUtbWFpbmUtMjYuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
 if (!CLERK_PUBLISHABLE_KEY) {

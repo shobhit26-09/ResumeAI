@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { SignInButton, SignUpButton, UserButton, useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "./ThemeToggle";
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const routes = [
     { name: "Home", path: "/" },
@@ -68,16 +69,20 @@ export default function Navbar() {
             <UserButton afterSignOutUrl="/" />
           ) : (
             <>
-              <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">
-                  Sign In
-                </Button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <Button variant="default" size="sm">
-                  Sign Up
-                </Button>
-              </SignUpButton>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={() => navigate("/sign-in")}
+              >
+                Sign In
+              </Button>
+              <Button 
+                variant="default" 
+                size="sm" 
+                onClick={() => navigate("/sign-up")}
+              >
+                Sign Up
+              </Button>
             </>
           )}
         </div>
@@ -123,16 +128,20 @@ export default function Navbar() {
                 </div>
               ) : (
                 <>
-                  <SignInButton mode="modal">
-                    <Button variant="outline" className="w-full">
-                      Sign In
-                    </Button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <Button variant="default" className="w-full">
-                      Sign Up
-                    </Button>
-                  </SignUpButton>
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => navigate("/sign-in")}
+                  >
+                    Sign In
+                  </Button>
+                  <Button 
+                    variant="default" 
+                    className="w-full"
+                    onClick={() => navigate("/sign-up")}
+                  >
+                    Sign Up
+                  </Button>
                 </>
               )}
             </div>
