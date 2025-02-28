@@ -16,6 +16,8 @@ const queryClient = new QueryClient();
 const ProtectedRoute = ({ children }) => {
   const { userId, isLoaded } = useAuth();
   
+  console.log("ProtectedRoute auth state:", { userId, isLoaded });
+  
   if (!isLoaded) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -25,9 +27,11 @@ const ProtectedRoute = ({ children }) => {
   }
   
   if (!userId) {
+    console.log("No userId, redirecting to sign-in");
     return <Navigate to="/sign-in" replace />;
   }
   
+  console.log("User authenticated, rendering protected content");
   return children;
 };
 
@@ -57,7 +61,7 @@ const App = () => {
                     routing="path" 
                     path="/sign-in" 
                     signUpUrl="/sign-up"
-                    redirectUrl="/"
+                    redirectUrl="/builder"
                   />
                 </div>
               } 
@@ -70,7 +74,7 @@ const App = () => {
                     routing="path" 
                     path="/sign-up" 
                     signInUrl="/sign-in"
-                    redirectUrl="/"
+                    redirectUrl="/builder"
                   />
                 </div>
               } 

@@ -1,14 +1,14 @@
 
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 
 export default function Hero() {
-  const { userId } = useAuth();
+  const { isSignedIn } = useUser();
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (userId) {
+    if (isSignedIn) {
       navigate("/builder");
     } else {
       navigate("/sign-up");
@@ -36,7 +36,7 @@ export default function Hero() {
                 className="w-full sm:w-auto"
                 onClick={handleGetStarted}
               >
-                {userId ? "Create Resume" : "Get Started"}
+                {isSignedIn ? "Create Resume" : "Get Started"}
               </Button>
               <Button 
                 size="lg" 

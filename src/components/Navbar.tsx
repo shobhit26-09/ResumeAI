@@ -1,13 +1,13 @@
 
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { UserButton, useAuth } from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "./ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const { userId } = useAuth();
+  const { isSignedIn } = useUser();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -73,7 +73,7 @@ export default function Navbar() {
         {/* Desktop Auth */}
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
-          {userId ? (
+          {isSignedIn ? (
             <UserButton afterSignOutUrl="/" />
           ) : (
             <>
@@ -129,7 +129,7 @@ export default function Navbar() {
             </nav>
             
             <div className="flex flex-col gap-3 mt-4">
-              {userId ? (
+              {isSignedIn ? (
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-muted-foreground">Manage account</span>
                   <UserButton afterSignOutUrl="/" />

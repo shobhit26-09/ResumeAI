@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from "react";
-import { useAuth } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -13,10 +13,13 @@ import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
 export default function Builder() {
-  const { userId, isLoaded } = useAuth();
+  const { isSignedIn, isLoaded } = useUser();
   const navigate = useNavigate();
   const { toast } = useToast();
   const resumeRef = useRef(null);
+  
+  console.log("Builder component - auth state:", { isSignedIn, isLoaded });
+  
   const [resumeData, setResumeData] = useState({
     personalInfo: {
       name: "",
@@ -53,15 +56,19 @@ export default function Builder() {
     }],
   });
 
-  // Redirect to sign-in if not authenticated
+  // This useEffect should run after the component mounts
   useEffect(() => {
-    if (isLoaded && !userId) {
+    console.log("Builder useEffect - checking auth");
+    // If we know the user is not signed in, redirect
+    if (isLoaded && !isSignedIn) {
+      console.log("User not signed in, redirecting to sign-in");
       navigate("/sign-in");
     }
-  }, [isLoaded, userId, navigate]);
+  }, [isLoaded, isSignedIn, navigate]);
 
-  // If still loading auth state, show loading
+  // Show loading state while Clerk is loading
   if (!isLoaded) {
+    console.log("Auth still loading, showing spinner");
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -69,10 +76,13 @@ export default function Builder() {
     );
   }
 
-  // If no user ID after loading, don't render the page
-  if (!userId) {
+  // Don't render the builder if the user is not signed in
+  if (!isSignedIn) {
+    console.log("User not signed in, returning null");
     return null;
   }
+
+  console.log("User authenticated, rendering builder");
 
   const updatePreview = (data) => {
     console.log("Preview data updated:", data);
