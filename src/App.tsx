@@ -12,29 +12,6 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// Protected route component
-const ProtectedRoute = ({ children }) => {
-  const { userId, isLoaded } = useAuth();
-  
-  console.log("ProtectedRoute auth state:", { userId, isLoaded });
-  
-  if (!isLoaded) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-  
-  if (!userId) {
-    console.log("No userId, redirecting to sign-in");
-    return <Navigate to="/sign-in" replace />;
-  }
-  
-  console.log("User authenticated, rendering protected content");
-  return children;
-};
-
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
@@ -44,14 +21,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route 
-              path="/builder" 
-              element={
-                <ProtectedRoute>
-                  <Builder />
-                </ProtectedRoute>
-              } 
-            />
+            <Route path="/builder" element={<Builder />} />
             <Route path="/analyzer" element={<Analyzer />} />
             <Route 
               path="/sign-in/*" 

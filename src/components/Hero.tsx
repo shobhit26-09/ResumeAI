@@ -8,11 +8,7 @@ export default function Hero() {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    if (isSignedIn) {
-      navigate("/builder");
-    } else {
-      navigate("/sign-up");
-    }
+    navigate("/builder");
   };
 
   const handleAnalyzeResume = () => {
@@ -36,7 +32,7 @@ export default function Hero() {
                 className="w-full sm:w-auto"
                 onClick={handleGetStarted}
               >
-                {isSignedIn ? "Create Resume" : "Get Started"}
+                Create Resume
               </Button>
               <Button 
                 size="lg" 
