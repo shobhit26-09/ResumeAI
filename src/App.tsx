@@ -9,12 +9,6 @@ import Index from "./pages/Index";
 import Builder from "./pages/Builder";
 import Analyzer from "./pages/Analyzer";
 import NotFound from "./pages/NotFound";
-import Templates from "./pages/Templates";
-import Pricing from "./pages/Pricing";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import Cookies from "./pages/Cookies";
-import GDPR from "./pages/GDPR";
 
 const queryClient = new QueryClient();
 
@@ -29,12 +23,6 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/builder" element={<Builder />} />
             <Route path="/analyzer" element={<Analyzer />} />
-            <Route path="/templates" element={<Templates />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="/gdpr" element={<GDPR />} />
             <Route 
               path="/sign-in/*" 
               element={
