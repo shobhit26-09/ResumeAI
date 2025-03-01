@@ -5,7 +5,7 @@ import App from './App.tsx';
 import './index.css';
 
 // Your Clerk publishable key
-const CLERK_PUBLISHABLE_KEY = "pk_test_Y29tcGxldGUtbWFpbmUtMjYuY2xlcmsuYWNjb3VudHMuZGV2JA";
+const CLERK_PUBLISHABLE_KEY = "pk_test_b3JnYW5pYy1mbHktODkuY2xlcmsuYWNjb3VudHMuZGV2JA";
 
 if (!CLERK_PUBLISHABLE_KEY) {
   throw new Error("Missing Clerk Publishable Key");
