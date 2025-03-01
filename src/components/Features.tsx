@@ -1,5 +1,5 @@
 
-import { Award, BarChart, Clock, FileText, Sparkles } from "lucide-react";
+import { Award, BarChart, Clock, FileText, Sparkles, Shield } from "lucide-react";
 
 export default function Features() {
   const features = [
@@ -28,13 +28,18 @@ export default function Features() {
       title: "Quick Generation",
       description: "Create a professional resume in minutes, not hours, with intuitive tools.",
     },
+    {
+      icon: <Shield className="h-6 w-6" />,
+      title: "Privacy Protection",
+      description: "Your data is secure with our advanced encryption and privacy controls.",
+    },
   ];
 
   return (
-    <section className="section-padding bg-muted/30">
+    <section className="section-padding bg-gradient-to-b from-muted/30 to-background">
       <div className="container px-4">
         <div className="text-center max-w-3xl mx-auto mb-16 animate-slide-in">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 bg-gradient-to-r from-purple-600 via-pink-500 to-blue-600 bg-clip-text text-transparent">
             Features Designed for Success
           </h2>
           <p className="text-lg text-muted-foreground">
@@ -46,13 +51,13 @@ export default function Features() {
           {features.map((feature, index) => (
             <div 
               key={index}
-              className="bg-card border rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in"
+              className="bg-card border rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 hover:border-purple-300 animate-fade-in"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-foreground">
+              <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center mb-4 text-purple-600 dark:text-purple-400">
                 {feature.icon}
               </div>
-              <h3 className="text-xl font-medium mb-2">{feature.title}</h3>
+              <h3 className="text-xl font-medium mb-2 text-foreground">{feature.title}</h3>
               <p className="text-muted-foreground">{feature.description}</p>
             </div>
           ))}
