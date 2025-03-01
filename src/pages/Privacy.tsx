@@ -1,6 +1,5 @@
 
 import LegalLayout from "@/components/LegalLayout";
-import { Link } from "react-router-dom";
 
 export default function Privacy() {
   return (
