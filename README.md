@@ -1,8 +1,6 @@
 
 # ResumeAI - AI-Powered Resume Builder & Analyzer
 
-![ResumeAI](public/og-image.png)
-
 ResumeAI is a comprehensive web application that helps job seekers create professional resumes and get AI-powered feedback to improve their job application materials.
 
 ## 📋 Project Overview
