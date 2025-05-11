@@ -1,171 +1,144 @@
 
-# ResumeAI - AI-Powered Resume Builder & Analyzer
+# ResumeAI 💼🧠
 
-ResumeAI is a comprehensive web application that helps job seekers create professional resumes and get AI-powered feedback to improve their job application materials.
+## 🔷 Project Title:
+**ResumeAI – An AI-Powered Resume Builder & Analyzer**
 
-## 📋 Project Overview
+## 🔍 Description:
+ResumeAI is a smart web-based application that empowers job seekers to build professional, ATS-optimized resumes and receive real-time, AI-driven feedback. Designed with modern frontend tools and best practices, the platform streamlines resume creation and improvement with intelligent suggestions, keyword enhancement, and formatting guidance.
 
-ResumeAI is built to modernize the resume creation process by leveraging artificial intelligence to help job seekers create more effective resumes. The platform offers two main tools:
+This repository reflects our major project development, showcasing our technical, design, and documentation capabilities.
 
-1. **AI Resume Builder**: Create polished, ATS-friendly resumes with AI assistance
-2. **AI Resume Analyzer**: Get instant feedback and improvement suggestions for existing resumes
+---
 
-## 🚀 Features
-
-### Resume Builder
-- Interactive form-based resume creation
-- Real-time preview of the resume as you build
-- AI-assisted content suggestions
-- Professional formatting and layout
-- One-click PDF export
-
-### Resume Analyzer
-- Resume scoring and evaluation
-- Detailed feedback on content, structure, and keywords
-- Specific improvement suggestions for each section
-- ATS compatibility checking
-- Save and compare multiple analyses
-
-### Additional Features
-- Multiple professional templates
-- User authentication and saved resumes
-- Responsive design for all devices
-- Dark/light mode support
-- ATS-friendly outputs
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 18**: Component-based UI library
-- **TypeScript**: Type-safe JavaScript
-- **Tailwind CSS**: Utility-first CSS framework
-- **Shadcn UI**: High-quality React components
-- **React Router**: Page navigation and routing
-- **React Query**: Data fetching and state management
-- **Clerk**: User authentication and management
-- **Lucide React**: Icon library
-- **HTML2Canvas & jsPDF**: PDF generation
-
-### Build Tools
-- **Vite**: Fast, modern frontend build tool
-- **PostCSS**: CSS processing
-
-### Key Libraries
-- **html2canvas**: Convert HTML to canvas for PDF export
-- **jsPDF**: Generate PDF files from canvas
-- **date-fns**: Date manipulation utilities
-- **recharts**: Charting and data visualization
-- **zod**: Schema validation
-- **class-variance-authority**: Component styling management
-
-## 🏗️ Project Structure
+## 📁 Folder Structure
 
 ```
-src/
-├── components/            # Reusable UI components
-│   ├── ui/                # Basic UI components (shadcn)
-│   ├── analyzer/          # Resume analyzer components
-│   └── ...                # Other component categories
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions and libraries
-├── pages/                 # Page components
-│   ├── Index.tsx          # Homepage
-│   ├── Builder.tsx        # Resume builder page
-│   ├── Analyzer.tsx       # Resume analyzer page
-│   ├── Templates.tsx      # Resume templates page
-│   ├── Pricing.tsx        # Pricing page
-│   ├── FeaturesPage.tsx   # Features page
-│   └── NotFound.tsx       # 404 page
-├── services/              # Business logic and API services
-└── App.tsx                # Main application component with routing
+ResumeAI/
+│
+├── public/                 # Static assets and icons
+├── src/                    # Source code for frontend
+│   ├── assets/             # Images, logos, visuals
+│   ├── components/         # Reusable UI components
+│   ├── pages/              # App views and pages
+│   ├── styles/             # Tailwind & custom CSS
+│   └── App.tsx            # Main component
+│
+├── .gitignore              # Git ignore rules
+├── index.html              # HTML entry point
+├── package.json            # Node package config
+├── tailwind.config.ts      # Tailwind configuration
+├── tsconfig.json           # TypeScript config
+├── vite.config.ts          # Vite bundler config
+└── README.md               # Project documentation (this file)
 ```
 
-## 🔒 Authentication Flow
+---
 
-The application uses Clerk for authentication with the following flow:
+## 💻 Source Code
+The source code is fully written in **TypeScript** and styled with **Tailwind CSS**. The project uses **Vite** as the build tool for fast performance and hot module replacement during development.
 
-1. Users can browse public pages (Home, Features, Templates, Pricing) without authentication
-2. Protected routes (Builder, Analyzer) require user sign-in
-3. Sign-in/sign-up pages are provided with customized UI
-4. After authentication, users are redirected to the homepage
+Key technologies:
+- Vite ⚡
+- React + TypeScript
+- Tailwind CSS
+- Node.js
+- HTML5 & Responsive Design
 
-## 🎨 Design System
+---
 
-ResumeAI features a modern, clean design with:
+## 📜 Documentation
 
-- Gradient accents using primary colors (blue, indigo)
-- Responsive layouts adapting to different screen sizes
-- Interactive animations and transitions
-- Dark/light mode support through Tailwind theming
-- Consistent spacing and typography
+The repository includes:
+- Complete frontend source code
+- Comments and structured files for easy understanding
+- Readme with installation & usage guide
+- Optional enhancements roadmap in Issues section
 
-## 💾 Data Management
+---
 
-- Resume data is managed through React state
-- Analyses are stored in browser storage for later access
-- User authentication data is handled securely by Clerk
-
-## 🧩 Core Components
-
-### Resume Builder Components
-- `ResumeForm`: Multi-section form for resume data input
-- `ResumePreview`: Live preview of the resume being created
-- `Builder`: Main page combining form and preview
-
-### Resume Analyzer Components
-- `FileUpload`: Upload interface for resume documents
-- `AnalysisResult`: Display of the AI analysis results
-- `SavedAnalyses`: Management of previously analyzed resumes
-- `Analyzer`: Main page orchestrating the analysis workflow
-
-### UI Components
-- Responsive `Navbar` with authentication state awareness
-- `Hero` section with call-to-action
-- `Features` showcase
-- `Footer` with navigation and contact information
-
-## 🖨️ Export Flow
-
-The PDF export process:
-1. User completes their resume in the builder
-2. The HTML resume is captured using html2canvas
-3. The canvas is converted to a PDF using jsPDF
-4. The file is downloaded to the user's device
-
-## 🚀 Getting Started
+## ⚙️ Installation Instructions
 
 ### Prerequisites
-- Node.js 16+
-- npm or yarn package manager
+- Node.js ≥ v16
+- npm ≥ v8
 
-### Installation
+### Setup Steps
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/resumeai.git
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/shobhit26-09/ResumeAI.git
+   cd ResumeAI
+   ```
 
-# Navigate to the project directory
-cd resumeai
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
 
-# Install dependencies
-npm install
+3. **Start the Development Server**
+   ```bash
+   npm run dev
+   ```
 
-# Start the development server
-npm run dev
-```
+4. Open your browser and visit: `http://localhost:5173`
 
-## 🔧 Environment Variables
+---
 
-For full functionality, you'll need to set up:
+## 🎥 5-Minute Video Demonstration
 
-- Clerk authentication keys
+📽️ Watch our project in action:  
+**[Demo Video Link (YouTube/Drive) – *Insert Your Video Link Here*]**
 
-## 📚 Additional Resources
+This video explains the project’s:
+- Objectives
+- Key features
+- Architecture
+- Live walkthrough
+- Future scope
 
-- [Clerk Documentation](https://clerk.dev/docs)
-- [Shadcn UI Components](https://ui.shadcn.com)
-- [React Query Documentation](https://tanstack.com/query/latest)
+---
 
-## 📝 License
+## 🗂️ Additional Elements
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- ✅ **Project Board**: Track progress and features via GitHub Projects tab.  
+- 🐞 **Issues**: All known bugs, improvements and feature requests tracked.
+- 🧪 **Unit Tests** *(To be added)*: Future versions will include frontend unit testing using Vitest or Jest.
+- 👨‍💻 **Collaborators**: All team members added as contributors.
+- 🔒 **Private Repository**: Shared with supervisor and project coordinator for evaluation.
+
+---
+
+## 👥 Team Members
+
+| Name             | Role                  | Email                 |
+|------------------|-----------------------|------------------------|
+| Shobhit [Leader] | Frontend Developer    | yourmail@example.com  |
+| [Member 2 Name]  | UI/UX Designer        |                       |
+| [Member 3 Name]  | Documentation & QA    |                       |
+
+> All members contributed via commits, code reviews, issue tracking, and documentation.
+
+---
+
+## 📌 Notes for Evaluation
+
+- Repository visibility is set to **Private**  
+- Shared with **supervisor** and **project coordinator**
+- Contains full project code, documentation, and setup guide
+- Maintained and updated throughout the semester
+- Contributions and GitHub activity visible in Insights
+
+---
+
+## 🚀 Future Scope
+
+- AI-powered keyword matching from job descriptions
+- PDF export of resume
+- Multi-template support for resumes
+- Admin dashboard for resume analytics
+
+---
+
+Thank you for reviewing our project! 🙏  
+We look forward to presenting this in the ETE evaluation.
