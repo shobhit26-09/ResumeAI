@@ -97,44 +97,22 @@ This video explains the project’s:
 - Live walkthrough
 - Future scope
 
----
-
-## 🗂️ Additional Elements
-
-- ✅ **Project Board**: Track progress and features via GitHub Projects tab.  
-- 🐞 **Issues**: All known bugs, improvements and feature requests tracked.
-- 🧪 **Unit Tests** *(To be added)*: Future versions will include frontend unit testing using Vitest or Jest.
-- 👨‍💻 **Collaborators**: All team members added as contributors.
-- 🔒 **Private Repository**: Shared with supervisor and project coordinator for evaluation.
-
----
 
 ## 👥 Team Members
 
 | Name             | Role                  | Email                 |
 |------------------|-----------------------|------------------------|
-| Shobhit [Leader] | Frontend Developer    | yourmail@example.com  |
-| [Member 2 Name]  | UI/UX Designer        |                       |
-| [Member 3 Name]  | Documentation & QA    |                       |
+| Shobhit Gupta    | Frontend & AI         | shobhitg22w@gmail.com  |
+| Aryan Rana       | Backend & UI/UX       | ranaaryan2100@gmail.com|
 
 > All members contributed via commits, code reviews, issue tracking, and documentation.
 
----
-
-## 📌 Notes for Evaluation
-
-- Repository visibility is set to **Private**  
-- Shared with **supervisor** and **project coordinator**
-- Contains full project code, documentation, and setup guide
-- Maintained and updated throughout the semester
-- Contributions and GitHub activity visible in Insights
-
----
 
 ## 🚀 Future Scope
 
 - AI-powered keyword matching from job descriptions
-- PDF export of resume
+- Support for more AI models
+- Further UI/UX Enhancements
 - Multi-template support for resumes
 - Admin dashboard for resume analytics
 
