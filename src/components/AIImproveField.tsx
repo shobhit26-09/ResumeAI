@@ -45,7 +45,7 @@ export default function AIImproveField({
       const prompt = generatePromptForField(fieldName, value);
       
       // Call the Gemini API using the API key
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=AIzaSyAEvHNa-fRhkLRnEyLHhR2Cp9t8memXYSg`, {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=AIzaSyDES8K36EG6QMZCed1_R2FWR2SVeoBIVX0`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
