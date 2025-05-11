@@ -49,7 +49,7 @@ export interface SavedAnalysis {
   results: AnalysisResultData;
 }
 
-const GEMINI_API_KEY = "AIzaSyAEvHNa-fRhkLRnEyLHhR2Cp9t8memXYSg";
+const GEMINI_API_KEY = "AIzaSyDES8K36EG6QMZCed1_R2FWR2SVeoBIVX0";
 const API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
 
 import * as pdfjsLib from 'pdfjs-dist';
