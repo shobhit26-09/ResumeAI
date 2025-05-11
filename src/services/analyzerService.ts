@@ -49,8 +49,8 @@ export interface SavedAnalysis {
   results: AnalysisResultData;
 }
 
-const GEMINI_API_KEY = "AIzaSyDES8K36EG6QMZCed1_R2FWR2SVeoBIVX0";
-const API_URL = "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent";
+const GEMINI_API_KEY = "AIzaSyAfyXnxzBm2H-Um6hy5ziDaofP8VRpdvnI";
+const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 import * as pdfjsLib from 'pdfjs-dist';
 pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
