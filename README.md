@@ -88,7 +88,7 @@ The repository includes:
 ## 🎥 5-Minute Video Demonstration
 
 📽️ Watch our project in action:  
-**[Demo Video Link (YouTube/Drive) – *Insert Your Video Link Here*]**
+**[Demo Video Link (YouTube/Drive) – *https://drive.google.com/file/d/1hQBVYIrwC8X1rnc2q5pKt4dAtgpi5G0W/view?usp=sharing*]**
 
 This video explains the project’s:
 - Objectives
