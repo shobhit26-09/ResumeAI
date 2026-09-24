@@ -1,138 +1,62 @@
-
-import Footer from "@/components/Footer";
-import Hero from "@/components/Hero";
-import Features from "@/components/Features";
-import Legal from "@/components/Legal";
-import Navbar from "@/components/Navbar";
-import { Bot, Star, FileText } from "lucide-react";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import Nav from "@/components/site/Nav";
+import SiteFooter from "@/components/site/SiteFooter";
+import { ResumePaper } from "@/components/resume/ResumePaper";
+import ReportView from "@/components/resume/Report";
+import { sampleResume, resumeToText } from "@/lib/resume";
+import { analyze } from "@/lib/ats";
 
 export default function Index() {
+  useEffect(() => { document.title = "ResumeAI · Free resume builder and ATS check"; }, []);
+  const report = analyze(resumeToText(sampleResume));
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <Navbar />
-      <main className="flex-1">
-        <Hero />
-        
-        {/* Testimonial section */}
-        <section className="py-16 bg-primary/5">
-          <div className="container max-w-6xl px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-2">Loved by thousands of job seekers</h2>
-              <div className="flex justify-center">
-                <div className="flex text-yellow-500 text-xl">
-                  <Star className="fill-yellow-500" />
-                  <Star className="fill-yellow-500" />
-                  <Star className="fill-yellow-500" />
-                  <Star className="fill-yellow-500" />
-                  <Star className="fill-yellow-500" />
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-background rounded-lg p-6 shadow-sm border">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-bold">JD</div>
-                  <div>
-                    <div className="font-medium">John Doe</div>
-                    <div className="text-xs text-muted-foreground">Marketing Specialist</div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground italic">"The AI suggestions helped me highlight achievements I hadn't considered. Got interviews at 3 companies within a week!"</p>
-                <div className="mt-4 flex text-yellow-500">
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                </div>
-              </div>
-              
-              <div className="bg-background rounded-lg p-6 shadow-sm border">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-500 font-bold">AS</div>
-                  <div>
-                    <div className="font-medium">Amy Smith</div>
-                    <div className="text-xs text-muted-foreground">Software Developer</div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground italic">"The one-click tailoring feature is a game-changer. I was able to customize my resume for different job applications in minutes!"</p>
-                <div className="mt-4 flex text-yellow-500">
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                </div>
-              </div>
-              
-              <div className="bg-background rounded-lg p-6 shadow-sm border">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-10 w-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-500 font-bold">TJ</div>
-                  <div>
-                    <div className="font-medium">Tom Jackson</div>
-                    <div className="text-xs text-muted-foreground">Project Manager</div>
-                  </div>
-                </div>
-                <p className="text-sm text-muted-foreground italic">"After struggling to get responses, I revamped my resume with ResumeAI and landed my dream job at a Fortune 500 company!"</p>
-                <div className="mt-4 flex text-yellow-500">
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                  <Star className="h-4 w-4 fill-yellow-500" />
-                </div>
-              </div>
-            </div>
+    <div className="app">
+      <Nav />
+      <main>
+        <section className="hero">
+          <div className="heroCopy">
+            <p className="eyebrow">Free · No sign-up · Private</p>
+            <h1>A resume that gets past the filter.</h1>
+            <p className="lead">Write it with live guidance, pick a clean template, and download a text-based PDF that applicant tracking systems can read. Then check it against the job you want.</p>
+            <div className="heroCtas"><Link to="/builder" className="btn btnPrimary">Start building</Link><Link to="/analyzer" className="btn btnGhost">Check an existing resume</Link></div>
+            <ul className="heroFacts"><li>Autosaves in your browser</li><li>Real text PDF, not an image</li><li>Your data never leaves your device</li></ul>
+          </div>
+          <div className="heroVisual" aria-hidden="true">
+            <div className="heroPaper"><ResumePaper data={sampleResume} template="modern" /></div>
+            <div className="heroScore card"><ReportView report={report} compact /></div>
           </div>
         </section>
-        
-        <Features />
-        
-        {/* How it works section */}
-        <section className="py-20 bg-muted/30">
-          <div className="container max-w-6xl px-4">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-4">How it works</h2>
-              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                Create your professional resume in three simple steps
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-                  <FileText className="h-8 w-8" />
-                </div>
-                <div className="text-4xl font-bold mb-2">1</div>
-                <h3 className="text-xl font-medium mb-2">Choose a template</h3>
-                <p className="text-muted-foreground">Select from our collection of professional, ATS-friendly templates</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-                  <Bot className="h-8 w-8" />
-                </div>
-                <div className="text-4xl font-bold mb-2">2</div>
-                <h3 className="text-xl font-medium mb-2">Add your information</h3>
-                <p className="text-muted-foreground">Fill in your details or let our AI assistant help you optimize your content</p>
-              </div>
-              
-              <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto mb-4">
-                  <Star className="h-8 w-8" />
-                </div>
-                <div className="text-4xl font-bold mb-2">3</div>
-                <h3 className="text-xl font-medium mb-2">Download and apply</h3>
-                <p className="text-muted-foreground">Download your perfect resume in PDF format and start applying to jobs</p>
-              </div>
-            </div>
+
+        <section className="band">
+          <div className="steps">
+            <div><span>01</span><h3>Write</h3><p>Fill in simple sections. Each bullet list shows how many lines start with a verb and include a number, the two things recruiters scan for.</p></div>
+            <div><span>02</span><h3>Choose a look</h3><p>Three single-column templates built for ATS parsing: Classic, Modern and Compact. Switch anytime without losing work.</p></div>
+            <div><span>03</span><h3>Check and export</h3><p>Score the resume against a job post, fix what's missing, then download a PDF with selectable text.</p></div>
           </div>
         </section>
-        
-        <Legal />
+
+        <section className="split">
+          <div>
+            <p className="eyebrow">ATS check</p>
+            <h2>Every point in the score is explained.</h2>
+            <p>No black box. The check looks at structure, contact details, action verbs, quantified results, length and keyword overlap with the job description, and tells you exactly what to change.</p>
+            <Link to="/analyzer" className="textLink">Run a check →</Link>
+          </div>
+          <div className="card miniChecks">
+            {report.categories.flatMap(c => c.checks).slice(0, 5).map(ch => (
+              <div key={ch.id} className={`miniCheck s-${ch.status}`}><i /><div><b>{ch.title}</b><p>{ch.detail}</p></div></div>
+            ))}
+          </div>
+        </section>
+
+        <section className="cta">
+          <h2>Start with a blank page or a sample.</h2>
+          <p>It takes about ten minutes to get a first version you can send.</p>
+          <Link to="/builder" className="btn btnPrimary">Open the builder</Link>
+        </section>
       </main>
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
