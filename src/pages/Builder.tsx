@@ -1,149 +1,66 @@
-
-import { useState, useRef, useEffect } from "react";
-import { useUser } from "@clerk/clerk-react";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import ResumeForm from "@/components/ResumeForm";
-import ResumePreview from "@/components/ResumePreview";
-import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import Nav from "@/components/site/Nav";
+import Editor from "@/components/resume/Editor";
+import { ResumePaper } from "@/components/resume/ResumePaper";
+import { emptyResume, resumeToText, templates, useStoredResume } from "@/lib/resume";
+import { analyze } from "@/lib/ats";
 
 export default function Builder() {
-  const { isSignedIn } = useUser();
-  const { toast } = useToast();
-  const resumeRef = useRef(null);
-  
-  const [resumeData, setResumeData] = useState(() => {
-    const templateData = sessionStorage.getItem("selectedTemplate");
-    if (templateData) {
-      sessionStorage.removeItem("selectedTemplate");
-      return JSON.parse(templateData);
-    }
-    
-    return {
-      personalInfo: {
-        name: "",
-        title: "",
-        email: "",
-        phone: "",
-        website: "",
-        summary: "",
-      },
-      experience: [
-        {
-          company: "",
-          position: "",
-          startDate: "",
-          endDate: "",
-          current: false,
-          description: "",
-        },
-      ],
-      education: [
-        {
-          institution: "",
-          degree: "",
-          field: "",
-          startDate: "",
-          endDate: "",
-          description: "",
-        },
-      ],
-      skills: [""],
-      certifications: [{
-        name: "",
-        url: ""
-      }],
-    };
-  });
+  const { resume, setResume, template, setTemplate, savedAt } = useStoredResume();
+  const [tab, setTab] = useState<"edit" | "preview">("edit");
+  const [scale, setScale] = useState(1);
+  const stage = useRef<HTMLDivElement>(null);
+  const nav = useNavigate();
+  const score = analyze(resumeToText(resume)).score;
+  const hasContent = !!(resume.basics.name || resume.experience.some(e => e.role));
 
-  const updatePreview = (data) => {
-    setResumeData(data);
-  };
+  useEffect(() => {
+    const el = stage.current; if (!el) return;
+    const ro = new ResizeObserver(() => setScale(Math.min(1, (el.clientWidth - 2) / 794)));
+    ro.observe(el); return () => ro.disconnect();
+  }, [tab]);
+  useEffect(() => { document.title = "Builder · ResumeAI"; }, []);
 
-  const handleDownload = async () => {
-    if (!resumeRef.current) {
-      toast({
-        title: "Error",
-        description: "Could not generate PDF. Please try again.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    try {
-      toast({
-        title: "Generating PDF",
-        description: "Please wait while we generate your resume...",
-      });
-
-      const element = resumeRef.current;
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        logging: false,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-      });
-      
-      const imgData = canvas.toDataURL('image/png');
-      
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-      });
-      
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(`${resumeData.personalInfo.name || 'resume'}.pdf`);
-      
-      toast({
-        title: "Resume downloaded",
-        description: "Your resume has been downloaded as a PDF",
-      });
-    } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast({
-        title: "Error",
-        description: "There was a problem generating your PDF. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const download = () => {
+    const prev = document.title;
+    document.title = (resume.basics.name || "resume").replace(/\s+/g, "_") + "_Resume";
+    window.print();
+    setTimeout(() => { document.title = prev; }, 500);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 pt-20">
-        <div className="container px-4 py-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="w-full lg:w-1/2">
-              <ResumeForm updatePreview={updatePreview} />
-            </div>
-
-            <div className="w-full lg:w-1/2 sticky top-24 h-fit">
-              <div className="mb-4 flex justify-between items-center">
-                <h2 className="text-2xl font-semibold">Preview</h2>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={handleDownload}>
-                    <Download className="h-4 w-4 mr-2" />
-                    Download PDF
-                  </Button>
-                </div>
-              </div>
-              <div className="border rounded-lg overflow-hidden shadow-sm" ref={resumeRef}>
-                <ResumePreview data={resumeData} />
-              </div>
+    <div className="app builderPage">
+      <Nav />
+      <div className="toolbar">
+        <div className="toolbarInner">
+          <div className="seg" role="tablist" aria-label="Template">{templates.map(t => <button key={t.id} role="tab" aria-selected={template === t.id} className={template === t.id ? "on" : ""} onClick={() => setTemplate(t.id)}>{t.name}</button>)}</div>
+          <div className="mobileTabs seg"><button className={tab === "edit" ? "on" : ""} onClick={() => setTab("edit")}>Edit</button><button className={tab === "preview" ? "on" : ""} onClick={() => setTab("preview")}>Preview</button></div>
+          <div className="toolbarRight">
+            <span className="saved">{savedAt ? "Saved on this device" : ""}</span>
+            {hasContent && <button className="scorePill" onClick={() => nav("/analyzer?from=builder")} title="Open full ATS check"><i className={score >= 75 ? "good" : score >= 50 ? "mid" : "low"} />ATS {score}</button>}
+            <button className="btn btnPrimary btnSm" onClick={download}>Download<span className="dlLong">&nbsp;PDF</span></button>
+          </div>
+        </div>
+      </div>
+      <main className="builder">
+        <div className={`builderEdit ${tab === "edit" ? "" : "hideMobile"}`}>
+          <div className="editIntro"><h1>Your resume</h1><p>Changes save automatically on this device. No account needed.</p>
+            {!hasContent && <button className="linkBtn" onClick={() => { import("@/lib/resume").then(m => setResume(JSON.parse(JSON.stringify(m.sampleResume)))); }}>Fill with a sample to see how it works</button>}
+            {hasContent && <button className="linkBtn danger" onClick={() => { if (confirm("Clear everything and start over?")) setResume(emptyResume()); }}>Start over</button>}
+          </div>
+          <Editor resume={resume} set={fn => setResume(fn)} />
+          <p className="editFoot">Want feedback? <Link to="/analyzer?from=builder">Run the full ATS check</Link></p>
+        </div>
+        <div className={`builderPreview ${tab === "preview" ? "" : "hideMobile"}`}>
+          <div className="stage" ref={stage}>
+            <div className="paperScale" style={{ zoom: scale }}>
+              <ResumePaper data={resume} template={template} placeholder />
             </div>
           </div>
         </div>
       </main>
-      <Footer />
+      <div className="printOnly"><ResumePaper data={resume} template={template} /></div>
     </div>
   );
 }
