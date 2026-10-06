@@ -29,13 +29,13 @@ export const emptyResume = (): Resume => ({
 // Clearly fictional sample used for templates and the home page.
 export const sampleResume: Resume = {
   basics: {
-    name: "Aarav Mehta",
-    title: "Frontend Engineer",
-    email: "aarav.mehta@example.com",
-    phone: "+91 98765 43210",
-    location: "Pune, India",
-    links: "github.com/aarav-sample · linkedin.com/in/aarav-sample",
-    summary: "Frontend engineer who ships accessible, fast React interfaces. Comfortable owning a feature from Figma to production, with a habit of measuring what changed.",
+    name: "Shobhit Gupta",
+    title: "Your headline",
+    email: "you@example.com",
+    phone: "Your phone number",
+    location: "City, Country",
+    links: "your-website.example · linkedin.com/in/your-name",
+    summary: "Add a short summary of your experience, strengths, and goals.",
   },
   experience: [
     { role: "Frontend Engineer", company: "Northwind Labs", location: "Remote", start: "Jan 2024", end: "Present", bullets: "Rebuilt the checkout flow in React and TypeScript, cutting median load time from 3.1s to 1.4s\nIntroduced a shared component library used across 4 product teams\nAdded end-to-end tests for payments, reducing release rollbacks by 60%" },
