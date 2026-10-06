@@ -50,7 +50,7 @@ export default function Editor({ resume, set }: { resume: Resume; set: Setter })
     <div className="editor">
       <Panel n={1} title="Basics" summary={b.name ? `${b.name}${b.title ? " · " + b.title : ""}` : "Name, contact, summary"} open={open === "basics"} onToggle={() => t("basics")}>
         <div className="grid2">
-          <Field label="Full name" value={b.name} onChange={setB("name")} placeholder="Aarav Mehta" />
+          <Field label="Full name" value={b.name} onChange={setB("name")} placeholder="Shobhit Gupta" />
           <Field label="Headline" value={b.title} onChange={setB("title")} placeholder="Frontend Engineer" />
           <Field label="Email" type="email" value={b.email} onChange={setB("email")} placeholder="you@email.com" />
           <Field label="Phone" value={b.phone} onChange={setB("phone")} placeholder="+91 98765 43210" />
