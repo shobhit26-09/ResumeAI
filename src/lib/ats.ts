@@ -40,9 +40,9 @@ export function analyze(text: string, job = ""): Report {
   const phone = /(\+?\d[\d\s().-]{8,}\d)/.test(raw);
   const link = /(linkedin\.com|github\.com|https?:\/\/|www\.|\.dev\b|\.io\b|portfolio)/i.test(raw);
   const structure: Check[] = [
-    { id: "exp", status: found.experience ? "pass" : "fail", title: found.experience ? "Experience section found" : "No experience section heading", detail: found.experience ? "ATS software can map your roles to the right field." : "Add a heading called \"Experience\" so parsers can find your roles. Internships and contract work count." },
-    { id: "edu", status: found.education ? "pass" : "fail", title: found.education ? "Education section found" : "No education section heading", detail: found.education ? "Degree and school will be parsed correctly." : "Add an \"Education\" heading with degree, school and dates." },
-    { id: "skills", status: found.skills ? "pass" : "warn", title: found.skills ? "Skills section found" : "No skills section", detail: found.skills ? "Recruiters filter on this section first." : "A plain \"Skills\" list is the easiest place for keyword filters to match you." },
+    { id: "exp", status: found.experience ? "pass" : "fail", title: found.experience ? "Experience section found" : "No experience section heading", detail: found.experience ? "A familiar heading may help readers and parsers find your roles." : "Add a heading called \"Experience\" so parsers can find your roles. Internships and contract work count." },
+    { id: "edu", status: found.education ? "pass" : "fail", title: found.education ? "Education section found" : "No education section heading", detail: found.education ? "An education heading is present. Check the extracted degree, school and dates yourself." : "Add an \"Education\" heading with degree, school and dates." },
+    { id: "skills", status: found.skills ? "pass" : "warn", title: found.skills ? "Skills section found" : "No skills section", detail: found.skills ? "A separate skills section makes your stated skills easier to find." : "A plain \"Skills\" list is the easiest place for keyword filters to match you." },
     { id: "summary", status: found.summary ? "pass" : "warn", title: found.summary ? "Summary found" : "No summary", detail: found.summary ? "A short summary helps a recruiter place you in seconds." : "Two lines on who you are and what you build. Optional, but it helps." },
     { id: "contact", status: email && phone ? "pass" : email || phone ? "warn" : "fail", title: email && phone ? "Email and phone present" : "Contact details incomplete", detail: email && phone ? (link ? "Plus a profile or portfolio link." : "Consider adding a LinkedIn, GitHub or portfolio link.") : `Missing: ${[!email && "email", !phone && "phone"].filter(Boolean).join(" and ")}.` },
   ];
@@ -58,8 +58,8 @@ export function analyze(text: string, job = ""): Report {
   const aRatio = pct(actionLed, bullets.length), qRatio = pct(quantified, bullets.length);
   const impact: Check[] = [
     { id: "verbs", status: aRatio >= 0.6 ? "pass" : aRatio >= 0.3 ? "warn" : "fail", title: `${actionLed} of ${bullets.length} bullets start with an action verb`, detail: aRatio >= 0.6 ? "Good. Lead with what you did." : "Start bullets with verbs like Built, Shipped, Reduced, Led instead of descriptions." },
-    { id: "numbers", status: qRatio >= 0.4 ? "pass" : qRatio >= 0.2 ? "warn" : "fail", title: `${quantified} of ${bullets.length} bullets include a number`, detail: qRatio >= 0.4 ? "Numbers make results believable." : "Add scale or results: users, load time, %, count of features, team size." },
-    { id: "weak", status: weakHits.length ? "warn" : "pass", title: weakHits.length ? `Weak phrasing: "${weakHits.slice(0, 2).join("\", \"")}"` : "No filler phrases", detail: weakHits.length ? "Replace with the result you produced." : "Your bullets read as outcomes, not duties." },
+    { id: "numbers", status: qRatio >= 0.4 ? "pass" : qRatio >= 0.2 ? "warn" : "fail", title: `${quantified} of ${bullets.length} bullets include a number`, detail: qRatio >= 0.4 ? "Numbers were detected. Check that they describe real scale or results, not just dates." : "Where you have evidence, describe real scale or results. Do not invent numbers to raise this score." },
+    { id: "weak", status: weakHits.length ? "warn" : "pass", title: weakHits.length ? `Weak phrasing: "${weakHits.slice(0, 2).join("\", \"")}"` : "No filler phrases", detail: weakHits.length ? "Replace with the result you produced." : "None of the filler phrases in this checklist were detected. Review whether each bullet describes your actual contribution." },
     { id: "pronouns", status: firstPerson > 2 ? "warn" : "pass", title: firstPerson > 2 ? `${firstPerson} first-person pronouns` : "No first-person pronouns", detail: firstPerson > 2 ? "Drop \"I\" and \"my\". Resumes are written in implied first person." : "Reads the way recruiters expect." },
   ];
   const impactScore = bullets.length ? clamp(aRatio * 45 + Math.min(qRatio / 0.5, 1) * 40 + (weakHits.length ? 0 : 10) + (firstPerson > 2 ? 0 : 5)) : 10;
@@ -125,4 +125,4 @@ export async function pdfToText(file: File): Promise<string> {
     [...rows.entries()].sort((a, b) => b[0] - a[0]).forEach(([, r]) => out.push(r.sort((a, b) => a.x - b.x).map(i => i.s).join(" ").replace(/\s+/g, " ").trim()));
   }
   return out.join("\n");
-}
+                                                            }
