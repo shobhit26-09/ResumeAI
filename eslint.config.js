@@ -17,6 +17,11 @@ export default tseslint.config(
     rules: { ...js.configs.recommended.rules },
   },
   {
+    files: ["src/**/*.jsx"],
+    // JSX component references are consumed by the JSX transform.
+    rules: { "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z]" }] },
+  },
+  {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
