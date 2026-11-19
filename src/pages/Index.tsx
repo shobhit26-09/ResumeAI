@@ -16,7 +16,7 @@ const features = [
   { icon: Eye, tone: "blue", t: "Live A4 preview", d: "See the real page update as you type, side by side with the editor." },
   { icon: Save, tone: "teal", t: "Autosave", d: "Every change is saved in your browser. Close the tab and pick up later." },
   { icon: Download, tone: "amber", t: "Text-based PDF", d: "Selectable text you can copy, search and review before sending." },
-  { icon: Gauge, tone: "green", t: "ATS score", d: "A 0-100 score across structure, impact, keywords and readability." },
+  { icon: Gauge, tone: "green", t: "Explained writing checks", d: "A 0-100 score across structure, impact, keywords and readability." },
   { icon: Target, tone: "rose", t: "Job keyword match", d: "Paste a job post and see which of its keywords you're missing." },
   { icon: PenLine, tone: "sky", t: "Bullet coach", d: "Counts lines that open with a verb and include a number as you write." },
 ];
@@ -54,7 +54,7 @@ export default function Index() {
               <span className="pill"><Sparkles size={14} /> Free · No sign-up · Private</span>
               <h1>A resume that tells <span className="grad">your story clearly.</span></h1>
               <p className="lead">Write with live guidance, pick a clean template, and download a selectable-text PDF for your applications. Then check it against the job you want.</p>
-              <div className="heroCtas"><Link to="/workspace" className="btn btnPrimary btnLg">Open your workspace <ArrowRight size={18} /></Link><Link to="/analyzer" className="btn btnGhost btnLg">Get your ATS score</Link></div>
+              <div className="heroCtas"><Link to="/workspace" className="btn btnPrimary btnLg">Open your workspace <ArrowRight size={18} /></Link><Link to="/analyzer" className="btn btnGhost btnLg">Review your resume</Link></div>
               <ul className="ticks"><li><Check size={16} />Autosaves in your browser</li><li><Check size={16} />Real text PDF</li><li><Check size={16} />Nothing leaves your device</li></ul>
             </div>
             <div className="collage reveal">
@@ -156,4 +156,4 @@ export default function Index() {
       <SiteFooter />
     </div>
   );
-}
+      }
