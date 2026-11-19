@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type SetStateAction } from "react";
+import { readStoredResume, RESUME_KEY, TEMPLATE_KEY, validTemplate } from './resume-storage.js';
 
 export type Experience = { role: string; company: string; location: string; start: string; end: string; bullets: string };
 export type Education = { school: string; degree: string; start: string; end: string; details: string };
@@ -57,31 +58,73 @@ export const templates: { id: TemplateId; name: string; note: string }[] = [
   { id: "compact", name: "Compact", note: "Tighter spacing to fit more on one page." },
 ];
 
-const KEY = "resumeai.resume.v2";
-const TKEY = "resumeai.template.v2";
-
 export function loadResume(): Resume {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) return { ...emptyResume(), ...JSON.parse(raw) };
-  } catch { /* ignore */ }
-  return emptyResume();
+  return readStoredResume({ getItem: key => localStorage.getItem(key) }, emptyResume).resume;
 }
 
 export function useStoredResume() {
-  const [resume, setResume] = useState<Resume>(loadResume);
-  const [template, setTemplate] = useState<TemplateId>(() => (localStorage.getItem(TKEY) as TemplateId) || "modern");
+  const [initial] = useState(() => readStoredResume({ getItem: key => localStorage.getItem(key) }, emptyResume));
+  const [resume, setResumeState] = useState<Resume>(initial.resume);
+  const touched = useRef(false);
+  const setResume = (value: SetStateAction<Resume>) => { touched.current = true; setResumeState(value); };
+  const [template, setTemplate] = useState<TemplateId>(() => {
+    try { return validTemplate(localStorage.getItem(TEMPLATE_KEY)); } catch { return 'modern'; }
+  });
   const [savedAt, setSavedAt] = useState<number | null>(null);
+  const [saveError, setSaveError] = useState(initial.error);
+  const [templateError, setTemplateError] = useState('');
+  const lastSaved = useRef(JSON.stringify(initial.resume));
+  const lastWriteSucceeded = useRef(!initial.error);
+  const latest = useRef(resume);
+  latest.current = resume;
+  const [saving, setSaving] = useState(false);
   useEffect(() => {
-    const id = window.setTimeout(() => { localStorage.setItem(KEY, JSON.stringify(resume)); setSavedAt(Date.now()); }, 400);
+    const serialized = JSON.stringify(resume);
+    if (!touched.current || (serialized === lastSaved.current && lastWriteSucceeded.current)) { setSaving(false); return; }
+    setSaving(true);
+    const id = window.setTimeout(() => {
+      try {
+        localStorage.setItem(RESUME_KEY, serialized);
+        lastSaved.current = serialized; lastWriteSucceeded.current = true;
+        setSavedAt(Date.now()); setSaveError('');
+      } catch {
+        setSaveError('Changes are not saved on this device. Download a backup before leaving this page.');
+      } finally { setSaving(false); }
+    }, 400);
     return () => clearTimeout(id);
   }, [resume]);
-  useEffect(() => { localStorage.setItem(TKEY, template); }, [template]);
-  return { resume, setResume, template, setTemplate, savedAt };
+  useEffect(() => {
+    try { localStorage.setItem(TEMPLATE_KEY, template); setTemplateError(''); }
+    catch { setTemplateError('Template preference could not be saved. Download a backup to keep it.'); }
+  }, [template]);
+  useEffect(() => {
+    const flush = () => {
+      const serialized = JSON.stringify(latest.current);
+      if (!touched.current || (serialized === lastSaved.current && lastWriteSucceeded.current)) return true;
+      try {
+        localStorage.setItem(RESUME_KEY, serialized);
+        lastSaved.current = serialized; lastWriteSucceeded.current = true;
+        return true;
+      } catch { return false; }
+    };
+    const warn = (event: BeforeUnloadEvent) => {
+      if (!flush()) { event.preventDefault(); event.returnValue = ''; }
+    };
+    window.addEventListener('beforeunload', warn);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      window.removeEventListener('beforeunload', warn);
+      window.removeEventListener('pagehide', flush);
+      flush();
+    };
+  }, []);
+  return { resume, setResume, template, setTemplate, savedAt, saving, saveError: saveError || templateError };
 }
 
-export function saveResume(r: Resume) { localStorage.setItem(KEY, JSON.stringify(r)); }
-export function saveTemplate(t: TemplateId) { localStorage.setItem(TKEY, t); }
+export function saveResume(r: Resume) { localStorage.setItem(RESUME_KEY, JSON.stringify(r)); }
+export function saveTemplate(t: TemplateId) {
+  try { localStorage.setItem(TEMPLATE_KEY, t); } catch { /* The builder exposes storage failure. */ }
+}
 
 export const lines = (s: string) => s.split("\n").map(l => l.replace(/^[\s•\-*]+/, "").trim()).filter(Boolean);
 
