@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "@/components/site/Nav";
 import Editor from "@/components/resume/Editor";
+import ResumeBackup from '@/components/resume/ResumeBackup.jsx';
 import { ResumePaper } from "@/components/resume/ResumePaper";
 import { emptyResume, resumeToText, templates, useStoredResume } from "@/lib/resume";
 import { analyze } from "@/lib/ats";
 
 export default function Builder() {
-  const { resume, setResume, template, setTemplate, savedAt } = useStoredResume();
+  const { resume, setResume, template, setTemplate, savedAt, saving, saveError } = useStoredResume();
   const [tab, setTab] = useState<"edit" | "preview">("edit");
   const [scale, setScale] = useState(1);
   const stage = useRef<HTMLDivElement>(null);
@@ -37,7 +38,7 @@ export default function Builder() {
           <div className="seg" role="tablist" aria-label="Template">{templates.map(t => <button key={t.id} role="tab" aria-selected={template === t.id} className={template === t.id ? "on" : ""} onClick={() => setTemplate(t.id)}>{t.name}</button>)}</div>
           <div className="mobileTabs seg"><button className={tab === "edit" ? "on" : ""} onClick={() => setTab("edit")}>Edit</button><button className={tab === "preview" ? "on" : ""} onClick={() => setTab("preview")}>Preview</button></div>
           <div className="toolbarRight">
-            <span className="saved">{savedAt ? "Saved on this device" : ""}</span>
+            <span className="saved" role="status">{saveError ? 'Not saved' : saving ? 'Saving...' : savedAt ? 'Saved on this device' : ''}</span>
             {hasContent && <button className="scorePill" onClick={() => nav("/analyzer?from=builder")} title="Open full ATS check"><i className={score >= 75 ? "good" : score >= 50 ? "mid" : "low"} />ATS {score}</button>}
             <button className="btn btnPrimary btnSm" onClick={download}>Download<span className="dlLong">&nbsp;PDF</span></button>
           </div>
@@ -49,6 +50,8 @@ export default function Builder() {
             {!hasContent && <button className="linkBtn" onClick={() => { import("@/lib/resume").then(m => setResume(JSON.parse(JSON.stringify(m.sampleResume)))); }}>Fill with a sample to see how it works</button>}
             {hasContent && <button className="linkBtn danger" onClick={() => { if (confirm("Clear everything and start over?")) setResume(emptyResume()); }}>Start over</button>}
           </div>
+          {saveError && <p className="saveWarning" role="alert">{saveError}</p>}
+          <ResumeBackup resume={resume} template={template} onRestore={data => { setResume(data.resume); setTemplate(data.template); }} />
           <Editor resume={resume} set={fn => setResume(fn)} />
           <p className="editFoot">Want feedback? <Link to="/analyzer?from=builder">Run the full ATS check</Link></p>
         </div>
@@ -63,4 +66,4 @@ export default function Builder() {
       <div className="printOnly"><ResumePaper data={resume} template={template} /></div>
     </div>
   );
-}
+            }
