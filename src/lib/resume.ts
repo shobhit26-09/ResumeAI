@@ -30,7 +30,7 @@ export const emptyResume = (): Resume => ({
 // Clearly fictional sample used for templates and the home page.
 export const sampleResume: Resume = {
   basics: {
-    name: "Shobhit Gupta",
+    name: "Alex Morgan",
     title: "Your headline",
     email: "you@example.com",
     phone: "Your phone number",
@@ -46,7 +46,7 @@ export const sampleResume: Resume = {
     { name: "Split Ledger", link: "splitledger.example.com", tech: "React, Node.js, PostgreSQL", bullets: "Expense-sharing app with real-time balances and CSV export\nServes 300+ monthly users from a single small instance" },
   ],
   education: [
-    { school: "Savitribai Phule Pune University", degree: "B.E. in Computer Engineering", start: "2019", end: "2023", details: "" },
+    { school: "Example University", degree: "B.S. in Computer Science", start: "2019", end: "2023", details: "" },
   ],
   skills: "React, TypeScript, JavaScript, Next.js, Node.js, PostgreSQL, Tailwind CSS, Jest, Playwright, Git",
   certifications: "",
