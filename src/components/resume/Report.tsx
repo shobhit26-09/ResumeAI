@@ -17,7 +17,7 @@ const Icon = ({ s }: { s: Status }) => s === "pass"
   : <svg className="ci ci-fail" viewBox="0 0 16 16"><circle cx="8" cy="8" r="8"/><path d="M5.4 5.4l5.2 5.2M10.6 5.4l-5.2 5.2" stroke="#fff" strokeWidth="1.7" strokeLinecap="round"/></svg>;
 
 export function Verdict({ score }: { score: number }) {
-  return <>{score >= 80 ? "Ready to send." : score >= 65 ? "Close. A few fixes will lift it." : score >= 45 ? "Needs work before you apply." : "Likely to be filtered out."}</>;
+  return <>{score >= 80 ? "Most writing checks passed." : score >= 65 ? "Review the remaining writing checks." : score >= 45 ? "Several writing checks need review." : "Start with the checks below."}</>;
 }
 
 export default function ReportView({ report, compact }: { report: Report; compact?: boolean }) {
@@ -26,8 +26,8 @@ export default function ReportView({ report, compact }: { report: Report; compac
       <div className="reportTop">
         <ScoreRing score={report.score} size={compact ? 104 : 132} />
         <div className="reportSummary">
-          <p className="eyebrow">ATS score</p>
-          <h3><Verdict score={report.score} /></h3>
+          <p className="eyebrow">Rule-based writing score</p>
+          <h3><Verdict score={report.score} /></h3><p className="subtle">A text checklist, not an ATS prediction, verified qualification or hiring decision.</p>
           <div className="bars">{report.categories.map(c => (
             <div className="bar" key={c.id}><span>{c.label}</span><i><em style={{ width: `${c.score}%` }} className={c.score >= 75 ? "good" : c.score >= 50 ? "mid" : "low"} /></i><b>{c.score}</b></div>
           ))}</div>
