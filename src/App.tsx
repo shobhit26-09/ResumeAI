@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
+import Workspace from "./pages/Workspace.jsx";
 import Builder from "./pages/Builder";
 import Analyzer from "./pages/Analyzer";
 import Templates from "./pages/Templates";
@@ -14,6 +15,7 @@ export default function App() {
       <ScrollTop />
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/workspace" element={<Workspace />} />
         <Route path="/builder" element={<Builder />} />
         <Route path="/analyzer" element={<Analyzer />} />
         <Route path="/templates" element={<Templates />} />
