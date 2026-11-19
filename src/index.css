@@ -489,3 +489,13 @@ em.good, i.good { background: var(--good); } em.mid, i.mid { background: var(--m
   .ctaInner { padding: 52px 24px 8px; }
   .ctaPaper { zoom: .36; height: 520px; transform: rotate(-4deg) translateY(40px); }
 }
+
+/* Device-local backup controls follow the editor's existing neutral styling. */
+.backupPanel { border: 1px solid #dce2e9; border-radius: 12px; padding: 18px; margin: 18px 0 24px; background: #fafbfd; }
+.backupPanel h2 { margin: 0 0 5px; font-size: 15px; font-weight: 700; }
+.backupPanel p { font-size: 13px; line-height: 1.6; color: #526174; margin: 0; }
+.backupActions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+.backupPanel .backupMessage:not(:empty) { margin-top: 12px; }
+.backupPanel .backupError, .saveWarning { color: #9b2525; }
+.saveWarning { border: 1px solid #e7b5b5; background: #fff7f7; border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.6; }
+@media print { .backupPanel, .saveWarning { display: none !important; } }
