@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Nav from "@/components/site/Nav";
 import SiteFooter from "@/components/site/SiteFooter";
+import JobEvidence from '@/components/resume/JobEvidence.jsx';
+import '@/components/resume/job-evidence.css';
 import ReportView from "@/components/resume/Report";
 import { analyze, pdfToText, type Report } from "@/lib/ats";
 import { loadResume, resumeToText } from "@/lib/resume";
@@ -72,7 +74,7 @@ export default function Analyzer() {
             {!ready && <p className="subtle center">Add your resume to run the check.</p>}
           </div>
         </div>
-        <div ref={out}>{report && <div className="card reportCard"><ReportView report={report} /><p className="subtle">Scores come from transparent rules: section headings, contact details, action verbs, numbers in bullets, length and keyword overlap. No resume data is sent anywhere.</p></div>}</div>
+        <div ref={out}>{report && <div className="card reportCard"><ReportView report={report} />{report.keywords.mode === "job" && <JobEvidence text={text} job={job} terms={[...report.keywords.found, ...report.keywords.missing]} />}<p className="subtle">Scores come from transparent rules: section headings, contact details, action verbs, numbers in bullets, length and keyword overlap. No resume data is sent anywhere.</p></div>}</div>
       </main>
       <SiteFooter />
     </div>
