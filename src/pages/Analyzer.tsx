@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import Nav from "@/components/site/Nav";
 import SiteFooter from "@/components/site/SiteFooter";
+import SavedChecks from '@/components/resume/SavedChecks.jsx';
 import JobEvidence from '@/components/resume/JobEvidence.jsx';
 import '@/components/resume/job-evidence.css';
 import ReportView from "@/components/resume/Report";
@@ -55,7 +56,7 @@ export default function Analyzer() {
     <div className="app">
       <Nav />
       <main className="page">
-        <div className="pageHead"><p className="eyebrow">ATS check</p><h1>See your resume the way a filter does.</h1><p>Upload a PDF and, optionally, paste the job description. You get a score with every point explained. Your file never leaves this browser.</p></div>
+        <div className="pageHead"><p className="eyebrow">ATS check</p><h1>Review your resume against the role.</h1><p>Upload a PDF and, optionally, paste the job description. See explained writing checks and job-wording evidence, not an employer ranking. Your file never leaves this browser.</p></div>
         <div className="checkGrid">
           <div className="card">
             <h2 className="cardTitle"><span>1</span>Your resume</h2>
@@ -74,6 +75,7 @@ export default function Analyzer() {
             {!ready && <p className="subtle center">Add your resume to run the check.</p>}
           </div>
         </div>
+        <SavedChecks text={text} job={job} busy={busy} onOpen={(resume, description) => { replaceText(resume, "Saved check snapshot"); setJob(description); }} />
         <div ref={out}>{report && <div className="card reportCard"><ReportView report={report} />{report.keywords.mode === "job" && <JobEvidence text={text} job={job} terms={[...report.keywords.found, ...report.keywords.missing]} />}<p className="subtle">Scores come from transparent rules: section headings, contact details, action verbs, numbers in bullets, length and keyword overlap. No resume data is sent anywhere.</p></div>}</div>
       </main>
       <SiteFooter />
