@@ -10,11 +10,12 @@ export default function Nav() {
       <div className="navInner">
         <Logo />
         <nav className="navLinks">
+          <NavLink to="/workspace">Workspace</NavLink>
           <NavLink to="/builder">Builder</NavLink>
           <NavLink to="/analyzer">ATS check</NavLink>
           <NavLink to="/templates">Templates</NavLink>
         </nav>
-        <Link to="/builder" className="btn btnPrimary btnSm">Build resume</Link>
+        <Link to="/workspace" className="btn btnPrimary btnSm">Your workspace</Link>
       </div>
     </header>
   );
